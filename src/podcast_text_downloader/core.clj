@@ -1,4 +1,6 @@
 (ns podcast-text-downloader.core
+  (:use clj-xpath.core)
+  (:use [podcast-text-downloader.common :only (get-items-from-rss)])
   (:use [podcast-text-downloader.content-fetch.core
          :only (content-fetch-from-scientificamerican)]))
 
