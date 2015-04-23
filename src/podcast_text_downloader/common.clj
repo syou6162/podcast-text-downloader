@@ -4,7 +4,6 @@
 (defn get-items-from-rss [rss-doc content-fetch-fn]
   (let [title ($x:text "/rss/channel/title" rss-doc)]
     (->> ($x "/rss/channel/item" rss-doc)
-         (take 3)
          (map
           (fn [item]
             (let [link ($x:text "./link" item)
