@@ -6,5 +6,6 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.github.kyleburton/clj-xpath "1.4.3"]
                  [org.clojure/tools.cli "0.2.1"]
-                 [info.yasuhisay/clj-utils "0.1.3"]]
+                 [info.yasuhisay/clj-utils "0.1.3"]
+                 [org.jsoup/jsoup "1.7.2"]]
   :main podcast-text-downloader.core)

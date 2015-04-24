@@ -4,16 +4,19 @@
          :only (read-old-content get-items-from-rss convert-to-docx get-cli-opts)])
   (:use [clj-utils.string :only (levenshtein-distance)]))
 
+(import org.jsoup.Jsoup)
+
 (defn content-fetch [html]
   (let [regex #"(?s)<div class=\"text\" dir=\"ltr\">(.*?)</div>"
         content (->> html
                      (re-find regex)
                      (second))]
     (-> content
-        (clojure.string/replace #"(?s)<p><strong>(.*?)</strong>" "<p><strong>$1: </strong>")
-        (clojure.string/replace #"(?s)<p><strong>(.*?)<br></strong>" "<p><strong>$1: <br></strong>")
-        (clojure.string/replace #"(?s)<p><strong>(.*?)</strong><br>" "<p><strong>$1: </strong><br>")
-        (clojure.string/replace #"(?s)<p><strong><span>(.*>)<br></span></strong><span>" "<p><strong><span>$1: <br></span></strong><span>"))))
+        (clojure.string/replace #"</p>" "@@@")
+        (clojure.string/replace #"<br>" "@@@")
+        (Jsoup/parse)
+        (.text)
+        (clojure.string/replace #"@@@" "\n\n"))))
 
 (defn get-most-possible-url-fn [base-url]
   (fn [title']
@@ -52,6 +55,6 @@
             (str
              "# " (:title item) "\n"
              "- " (:site-title item) "\n"
-             "- " (:pubDate item) "\n"
+             "- " (:pubDate item) "\n\n"
              (:content item))))
          (clojure.string/join "\n"))))
