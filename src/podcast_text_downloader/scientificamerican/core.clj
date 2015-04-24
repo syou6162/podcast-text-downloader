@@ -1,13 +1,14 @@
-(ns podcast-text-downloader.core
+(ns podcast-text-downloader.scientificamerican.core
   (:use clj-xpath.core)
   (:use [clojure.java.shell :only [sh]])
   (:require [clojure.tools.cli :as cli])
-  (:use [podcast-text-downloader.common :only (get-items-from-rss)])
-  (:use [podcast-text-downloader.content-fetch.core
+  (:use [podcast-text-downloader.common
+         :only (read-old-content get-items-from-rss convert-to-docx get-cli-opts)])
+  (:use [podcast-text-downloader.scientificamerican.content-fetch
          :only (content-fetch-from-scientificamerican)]))
 
-(def old-md "old.md")
-(def old-content (slurp old-md))
+(def old-md "old_scientificamerican.md")
+(def old-content (read-old-content old-md))
 
 (defn gen-markdown-file []
   (let [items (-> (slurp "http://rss.sciam.com/sciam/60secsciencepodcast")
@@ -28,16 +29,9 @@
              (:content item))))
          (clojure.string/join "\n"))))
 
-(defn convert-to-docx [output-filename]
-  (sh "pandoc" "-f" "markdown+ignore_line_breaks" old-md "-o" output-filename))
-
-(defn- get-cli-opts [args]
-  (cli/cli args
-           ["--output-filename"]))
-
 (defn -main [& args]
   (let [[options args banner] (get-cli-opts args)
         md (gen-markdown-file)]
     (when-not (= md old-content)
       (spit old-md md)
-      (convert-to-docx (:output-filename options)))))
+      (convert-to-docx old-md (:output-filename options)))))

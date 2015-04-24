@@ -1,5 +1,7 @@
 (ns podcast-text-downloader.common
-  (:use clj-xpath.core))
+  (:use clj-xpath.core)
+  (:use [clojure.java.shell :only [sh]])
+  (:require [clojure.tools.cli :as cli]))
 
 (defn get-items-from-rss [rss-doc content-fetch-fn]
   (let [title ($x:text "/rss/channel/title" rss-doc)]
@@ -16,3 +18,14 @@
               (-> item
                   (assoc :content content)))))
          (vec))))
+
+(defn convert-to-docx [old-md output-filename]
+  (sh "pandoc" "-f" "markdown+ignore_line_breaks" old-md "-o" output-filename))
+
+(defn get-cli-opts [args]
+  (cli/cli args ["--output-filename"]))
+
+(defn read-old-content [filename]
+  (when-not (.exists (java.io.File. filename))
+    (sh "touch" filename))
+  (slurp filename))
