@@ -3,7 +3,7 @@
          :only (read-old-content convert-to-docx get-cli-opts)])
   (:use [podcast-text-downloader.bbc.common :only (gen-markdown-file)]))
 
-(def old-md "the_english_we_speak.md")
+(def old-md "old_the_english_we_speak.md")
 (def old-content (read-old-content old-md))
 
 (defn -main [& args]
