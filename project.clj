@@ -8,4 +8,5 @@
                  [org.clojure/tools.cli "0.2.1"]
                  [info.yasuhisay/clj-utils "0.1.3"]
                  [org.jsoup/jsoup "1.7.2"]]
+  :jvm-opts ["-Xms2G" "-Xmx2G" "-server"]
   :main podcast-text-downloader.core)
