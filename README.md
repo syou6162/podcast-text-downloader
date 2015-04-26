@@ -6,7 +6,8 @@ A clojure library to fetch contents of podcasts.
 
 ```sh
 lein run -m podcast-text-downloader.scientificamerican.core --output-filename scientificamerican.docx
-lein run -m podcast-text-downloader.six-minute-english.core --output-filename six-minute-english.docx
+lein run -m podcast-text-downloader.bbc.six-minute-english.core --output-filename six-minute-english.docx
+lein run -m podcast-text-downloader.bbc.the-english-we-speak.core --output-filename the-english-we-speak.docx
 ```
 
 ## License
