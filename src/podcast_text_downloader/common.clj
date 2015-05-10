@@ -3,9 +3,12 @@
   (:use [clojure.java.shell :only [sh]])
   (:require [clojure.tools.cli :as cli]))
 
+(def ^:dynamic *max-rss-size* 10)
+
 (defn get-items-from-rss [rss-doc content-fetch-fn]
   (let [title ($x:text "/rss/channel/title" rss-doc)]
     (->> ($x "/rss/channel/item" rss-doc)
+         (take *max-rss-size*)
          (map
           (fn [item]
             (let [link ($x:text "./link" item)
